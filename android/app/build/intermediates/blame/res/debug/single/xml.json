@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "X:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml\\provider_paths.xml",
+        "source": "X:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\exploded-aar\\ohome\\react-native-image-picker\\unspecified\\res\\xml\\provider_paths.xml"
+    },
+    {
+        "merged": "X:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml\\preferences.xml",
+        "source": "X:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\exploded-aar\\com.facebook.react\\react-native\\0.53.0\\res\\xml\\preferences.xml"
+    }
+]

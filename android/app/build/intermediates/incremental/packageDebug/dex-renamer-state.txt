@@ -1,0 +1,4 @@
+#Tue Oct 23 10:15:17 EEST 2018
+base.0=X\:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
+renamed.0=classes.dex
+file.0=X\:\\Data-dev\\oh-appli\\android\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex
