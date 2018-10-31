@@ -10,8 +10,9 @@ export default class Logout extends Component {
 			)
 	}
 	constructor(props) {
-	  super(props);
-		// console.warn('lkjflsq');
+		super(props);
+		global.type = null
+		//console.warn(global.type);
 		removeEmailRes();
 		removePassRes();
 		this.props.navigation.navigate(LoginScreen);

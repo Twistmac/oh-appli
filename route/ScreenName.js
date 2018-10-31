@@ -14,6 +14,7 @@ const AjoutAdsScreen = 'AjoutAdsScreen';
 const ChatScreen = 'ChatScreen';
 const CommentairesScreen = 'CommentairesScreen';
 const detailsAnnoncesSyndicScreen = 'detailsAnnoncesSyndicScreen';
+const HomePartenaireScreen = 'HomePartenaireScreen';
 
 export {
 	HomeScreen,
@@ -30,5 +31,6 @@ export {
 	AjoutAdsScreen,
 	ChatScreen,
 	CommentairesScreen,
-	detailsAnnoncesSyndicScreen
+	detailsAnnoncesSyndicScreen,
+	HomePartenaireScreen
 }

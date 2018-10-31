@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsyncStorage, NetInfo  } from 'react-native';
-// const Serveur = 'https://ohome.easywebmobile.fr/api/';
-const Serveur = 'http://192.168.0.9/oh/public/api/';
+const Serveur = 'https://ohome.easywebmobile.fr/api/';
+// const Serveur = 'http://192.168.0.9/oh/public/api/';
 
 
 const PostLogin = Serveur+'login-appli';

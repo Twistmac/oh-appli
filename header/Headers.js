@@ -14,6 +14,7 @@ export default class Headers extends Component {
 	}
 
 	componentDidMount(){
+
 		getCategories().then((data) =>{
 	 		var dataCategorie = [];
 			for (var i = 0; i < data.categories.length ; i++) {
@@ -63,7 +64,6 @@ export default class Headers extends Component {
 
 	render() {
 		return (
-			
 				<Header style ={styles.Header} >
 					<Left style = {{flex: 1}} >
 						 <Button onPress={() =>  this.props.dataSend.navigation.openDrawer()} 

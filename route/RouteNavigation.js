@@ -21,6 +21,7 @@ import AjoutAdsScreen from '../templates/AjoutAdsActivity';
 import CommentairesScreen from '../templates/CommentairesActivity';
 import detailsAnnoncesSyndicScreen from '../templates/detailsAnnoncesSyndicActivity';
 import ChatScreen from '../templates/chat/Chat';
+import HomePartenaireScreen from '../templates/HomePartenaireActivity';
 
 
 
@@ -59,20 +60,49 @@ const CustomDrawerContentComponent = (props)=>(
       </Container>
 )
 
+const Drawer2 = DrawerNavigator({
+    HomePartenaireScreen: {
+        screen: HomePartenaireScreen,
+        navigationOptions: {
+            headerTitleStyle: { left:10},
+            title: "Partenaire",
+            // drawerLockMode:'unlocked',
+        }
+    },
+    LogoutScreen: {
+        screen: LogoutScreen,
+        navigationOptions: {
+             headerTitleStyle: { left:30 },
+             title: "Logout",
+        }
+    },
+},
+{
+    // navigationOptions: navigationOptions, //enleve draw
+    initialRouteName:'HomePartenaireScreen',
+    contentComponent: CustomDrawerContentComponent,
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute:'DrawerClose',
+    drawerToggleRoiute:'DrawerToggle',
+    contentOptions: {
+        activeTintColor: "#f5d017" //couilure active menus
+    },
+});
+
 const Drawer = DrawerNavigator({
-    HomeScreen: {
+    HomeScreen:{
            screen: HomeScreen,
            navigationOptions: {
                headerTitleStyle: { left:10},
                title: "My ads",
-               // drawerLockMode:'unlocked',
+               //drawerLockMode:'locked',
            }
        },
     ProfileScreen: {
            screen: ProfileScreen,
            navigationOptions: {
                 headerTitleStyle: { left:30 },
-                title: "Profile",
+                title: global.type,
                 // drawerLockMode:'unlocked', //enleve draw
            }
        },
@@ -117,7 +147,7 @@ const Drawer = DrawerNavigator({
                 headerTitleStyle: { left:30 },
                 title: "Logout",
            }
-       },
+       }      
 },
     {
         // navigationOptions: navigationOptions, //enleve draw
@@ -134,6 +164,8 @@ const Drawer = DrawerNavigator({
 
 
 
+
+
 const PageRoute = StackNavigator({
         LoginScreen:{screen: LoginScreen},
         LoginPartenaireScreen:{screen: LoginPartenaireScreen},
@@ -142,8 +174,9 @@ const PageRoute = StackNavigator({
         AjoutAdsScreen:{screen: AjoutAdsScreen},
         ChatScreen:{screen: ChatScreen},
         CommentairesScreen:{screen: CommentairesScreen},
+        HomePartenaireScreen:{screen: HomePartenaireScreen},
         detailsAnnoncesSyndicScreen:{screen: detailsAnnoncesSyndicScreen},
-        Drawer:{screen: Drawer}
+        Main : {screen : (global.type == 'p')? Drawer2 : Drawer}
     },
     {
         headerMode: "none",
@@ -161,3 +194,6 @@ const styles = StyleSheet.create({
 })
 
 export default PageRoute;
+
+
+

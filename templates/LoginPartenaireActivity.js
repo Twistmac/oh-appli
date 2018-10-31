@@ -29,8 +29,12 @@ import {
 from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import style from '../Styles/Style';
-import {AddProfilScreen, HomeScreen, LoginScreen} from '../route/ScreenName';
+import {AddProfilScreen, HomeScreen, LoginScreen, HomePartenaireScreen} from '../route/ScreenName';
 import {loginPartenaire, storePartner, getPartner} from './services/Services';
+import { StackNavigator, DrawerNavigator, DrawerItems} from  'react-navigation';
+
+
+
 const dataArray = [
   { title: "First Element", content: "Lorem ipsum dolor sit amet" },
   { title: "Second Element", content: "Lorem ipsum dolor sit amet" },
@@ -126,6 +130,7 @@ export default class LoginPartenaireActivity extends Component {
 	};
 
 	post(){
+		
 		let etat = this.state;
 		const {navigation} = this.props;
 		//email
@@ -175,19 +180,10 @@ export default class LoginPartenaireActivity extends Component {
 					storePartner(params);
 					global.userName = result.pseudo;
 					global.id = result.id;
-					console.warn(result.result);
-					navigation.navigate(HomeScreen);
-					Toast.show({
-		                text: "Login success !",
-		                buttonText: "Ok",
-		                duration:3000,
-		                type:"success"
-	          		})
-	          		/*if (result.complete !== 1) {
-	          			navigation.navigate(AddProfilScreen);
-	          		}else{
-	          			navigation.navigate(HomeScreen);
-	          		}*/
+					global.role = result.role;					
+					global.type = "p";
+					navigation.navigate(HomePartenaireScreen);
+				
 				}else if(result.success == false){
 					Toast.show({
 		                text: "Wrong Password!",

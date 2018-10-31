@@ -141,10 +141,11 @@ export default class Login extends Component {
 				this.setState({
                     visibleSpinner: false,
                 })
-                //console.warn(result);
+                //console.warn(result.type);
 				//succes = 1 succes
 				//succes = 2 wrong pass word
 				//succes = 3 user not exist
+				
 				if (result.success == 1) {
 					storeMailResident(etat.email);
 					storePassResident(etat.password);
@@ -152,10 +153,12 @@ export default class Login extends Component {
 					global.id = result.id;
 					global.syndic_id = result.syndic_id;
 					global.nom_residence = result.nom_residence;
+					global.type = "r";
 	          		if (result.complete !== 1) {
 	          			navigation.navigate(AddProfilScreen);
 	          		}else{
-	          			navigation.navigate(AnnoncesScreen);
+						//console.warn(result.success)
+	          	    	navigation.navigate(AnnoncesScreen);
 	          		}
 				}else if(result.success == 2){
 					Toast.show({
