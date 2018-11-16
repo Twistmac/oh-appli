@@ -26,11 +26,12 @@ import {
 	ListItem, 
 	Right, 
 	Thumbnail} from 'native-base';
-import {ChatScreen} from '../route/ScreenName';
+import {ChatScreen, ChatPartenaireScreen, ChatResidentPartenaireScreen} from '../route/ScreenName';
 import HeadersNavigation from '../header/HeadersNavigation';
 import FootersDetails from '../footer/FootersDetails';
-import {getLike} from './services/Services';
+import {getLike, getResidentById} from './services/Services';
 import Footers from '../footer/Footers';
+import FootersPartenaire from '../footer/FootersPartenaire';
 
 
 const _format = 'MMMM  DD';
@@ -41,15 +42,17 @@ export default class detailsAnnoncesActivity extends Component {
 		let paramsNavigate = this.props.navigation.state.params.params;
 		let sectionID = this.props.navigation.state.params.sectionID;
 		const data = paramsNavigate;
-		// console.warn(data);
+		 //console.warn(data);
 		// console.warn(sectionID);
 	  this.state = {
 	  	data : data,
 	  	sectionID : sectionID,
 	  	like: data.like,
-	  	disabled:true
+		disabled:true,
+		residentDetail : null  
 	  };
 	  // this.updateLike = this.updateLike.bind(this);
+	  
 	}
 
 	static navigationOptions = {
@@ -63,6 +66,8 @@ export default class detailsAnnoncesActivity extends Component {
         // console.warn(data);
       	})
 	}
+
+	
 
 	updateLike(like){
 		// console.warn(like);
@@ -85,12 +90,97 @@ export default class detailsAnnoncesActivity extends Component {
 		})
 		// console.warn(this.state.data);
 	}
+
+	renderMenuContact(){
+		const iconStyle = this.state.disabled ? styles.iconColorDisabled : styles.iconColorOhome;
+		const iconStyle2 = styles.iconColorOhome;
+		if(global.UserRole == 'p' && this.state.data.type == 'r'){
+			return(
+				<View style={styles.container}>
+				                      <View style={styles.View_Social}>
+					                      
+				                      </View>
+				                      <View style={styles.View_Social}>
+					                      <TouchableOpacity 
+					                      		disabled = {this.state.disabled}
+					                      		onPress = {this.goToChat.bind(this)} >
+				                                  <Icon  style ={[styles.Ios_chatboxes, iconStyle]} name='ios-chatboxes' />
+				                          </TouchableOpacity>
+				                      </View>
+				                      <View style={styles.View_Social}>
+				                      	<TouchableOpacity>
+				                                  <Icon style ={styles.Ios_heart} name='ios-heart' />
+				                          </TouchableOpacity>
+				                      </View>
+				</View>
+			)
+
+		}
+		if(global.UserRole == 'p' && this.state.data.type == 'p'){
+			return(
+				<View style={styles.container}>
+				                      
+				</View>
+			)
+
+		}
+		if(global.UserRole == 'r' && this.state.data.type == 'p'){
+			return(
+				<View style={styles.container}>
+				     <View style={styles.View_Social}>
+						<TouchableOpacity>
+							<Icon style ={styles.Ios_call} name='ios-call' />
+						</TouchableOpacity>
+					</View>
+					<View style={styles.View_Social}>
+						<TouchableOpacity 
+								//disabled = {this.state.disabled}
+								onPress = {this.goToChat.bind(this)} >
+								<Icon  style ={[styles.Ios_chatboxes, iconStyle2]} name='ios-chatboxes' />
+						</TouchableOpacity>
+					</View>
+					<View style={styles.View_Social}>
+						<TouchableOpacity>
+								<Icon style ={styles.Ios_heart} name='ios-heart' />
+						</TouchableOpacity>
+					</View>         
+				</View>
+			)
+
+		}
+		
+
+		return(
+			<View style={styles.container}>
+					<View style={styles.View_Social}>
+						<TouchableOpacity>
+							<Icon style ={styles.Ios_call} name='ios-call' />
+						</TouchableOpacity>
+					</View>
+					<View style={styles.View_Social}>
+						<TouchableOpacity 
+								disabled = {this.state.disabled}
+								onPress = {this.goToChat.bind(this)} >
+								<Icon  style ={[styles.Ios_chatboxes, iconStyle]} name='ios-chatboxes' />
+						</TouchableOpacity>
+					</View>
+					<View style={styles.View_Social}>
+						<TouchableOpacity>
+								<Icon style ={styles.Ios_heart} name='ios-heart' />
+						</TouchableOpacity>
+					</View>
+			</View>
+		)
+	
+	}
+
 	componentWillMount() {
 	    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 	}
 
 	componentDidMount(){
-		// console.warn(this.state.data.user_id.username);
+		//console.warn(this.state.data.type)
+		 
 		if (this.state.data.user_id == null) {
 			this.setState({
 				disabled:true
@@ -108,6 +198,9 @@ export default class detailsAnnoncesActivity extends Component {
 	BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 	// const {navigation} = this.props;
 	// console.warn(navigation);
+	//console.warn(this.state.data)
+	//getResidentById()
+
 	}
 
 	handleBackButtonClick() {
@@ -151,7 +244,24 @@ export default class detailsAnnoncesActivity extends Component {
 	}
 
 	goToChat(){
-		this.props.navigation.navigate(ChatScreen, {ID_USER_2:this.state.data.user_id.id, USER_NAME:this.state.data.user_id.username, dataAnnonces:this.state.data, type : "resident"});
+		//console.warn(global.UserRole)
+		
+		if(global.UserRole == 'r'){
+			if(this.state.data.type == 'p'){
+				//console.warn(this.state.data)
+				this.props.navigation.navigate(ChatResidentPartenaireScreen, {dataAnnonces:this.state.data, ID_USER_2:this.state.data.id_partenaire, TYPE: 'rp'});
+
+			}else{
+				this.props.navigation.navigate(ChatScreen, {ID_USER_2:this.state.data.user_id.id, USER_NAME:this.state.data.user_id.username, dataAnnonces:this.state.data, type : "resident"});
+
+			}
+		}
+		if(global.UserRole == 'p'){
+			//console.warn('partenaire');
+			//console.warn(this.state.data);
+			this.props.navigation.navigate(ChatPartenaireScreen, {dataAnnonces:this.state.data, ID_USER_2:this.state.data.user_id});
+		}
+		
 	}
 
 	_renderDate(data){
@@ -165,7 +275,18 @@ export default class detailsAnnoncesActivity extends Component {
       return(
             <Text>{moment(data.created_at).format(_format, 'en')}</Text>
         )
-    }
+	}
+	
+	render_footer(data){
+		if(global.UserRole == 'p'){
+			return(
+				<FootersPartenaire navigation ={data}/>
+			)
+		}
+		else{
+			<Footers navigation ={data}/>
+		}
+	}
 
 	render() {
 		
@@ -221,25 +342,7 @@ export default class detailsAnnoncesActivity extends Component {
 				              <View>
 				              {this._renderDate(this.state.data)}
 				              </View>
-				              <View style={styles.container}>
-				                      <View style={styles.View_Social}>
-					                      <TouchableOpacity>
-			                                  <Icon style ={styles.Ios_call} name='ios-call' />
-			                               </TouchableOpacity>
-				                      </View>
-				                      <View style={styles.View_Social}>
-					                      <TouchableOpacity 
-					                      		disabled = {this.state.disabled}
-					                      		onPress = {this.goToChat.bind(this)} >
-				                                  <Icon  style ={[styles.Ios_chatboxes, iconStyle]} name='ios-chatboxes' />
-				                          </TouchableOpacity>
-				                      </View>
-				                      <View style={styles.View_Social}>
-				                      	<TouchableOpacity>
-				                                  <Icon style ={styles.Ios_heart} name='ios-heart' />
-				                          </TouchableOpacity>
-				                      </View>
-				                </View>
+				              	{this.renderMenuContact()}
 				              </Body>
 				            </CardItem>
 				        </Card>
@@ -262,7 +365,11 @@ export default class detailsAnnoncesActivity extends Component {
 				        </Card>
 				    </View>
 				</Content>
-				<Footers navigation ={dataSend}/>
+			 {/* <Footers navigation ={dataSend}/>  */}
+			 {this.render_footer(dataSend)}
+				
+				
+				
 				{/*<FootersDetails dataSendFooter={dataSendFooter} />*/}
 			</Container>
 		);

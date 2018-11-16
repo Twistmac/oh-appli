@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsyncStorage, NetInfo  } from 'react-native';
 const Serveur = 'https://ohome.easywebmobile.fr/api/';
-// const Serveur = 'http://192.168.0.9/oh/public/api/';
+//const Serveur = 'https://192.168.0.5/oh/public/api/';
 
 
 const PostLogin = Serveur+'login-appli';
@@ -19,10 +19,14 @@ const GetOneAnnoncesSyndic = Serveur+'get-annonce-syndic/';
 const GetCommentsSyndic = Serveur+'coms-annonce/';
 const PostLoginPartenaire = Serveur+'login-partenaire';
 const PostAnnonceRes = Serveur+'post-annonce-not-image';
+const updatePartenaire = Serveur+'update-partenaire';
+const GetAnnoncesSyndicParteniaire = Serveur+'annonces-syndic-partenaire/';
 
 const ACCESS_EMAILRES = 'emailres';
 const ACCESS_PWD = 'passres';
 const PARTNER = 'partner';
+const DETAIL_PARTENAIRE = 'detail_partenaire';
+const ROLE = 'role';
 
 async function storePartner(params){
     try{
@@ -38,6 +42,40 @@ async function getPartner(){
         return Partener;
     }catch(error){
         alert(error);
+    }
+}
+
+async function detailPartenaire(params){
+    try{
+        await AsyncStorage.setItem(DETAIL_PARTENAIRE,params);
+    }catch(error){
+        // console.warn(error);
+    }
+}
+
+async function getDetailPartenaire(){
+    try{
+        let Partener = await AsyncStorage.getItem(DETAIL_PARTENAIRE);
+        return Partener;
+    }catch(error){
+        alert(error);
+    }
+}
+
+async function storeRole(role){
+    try{
+        await AsyncStorage.setItem(ROLE,role);
+    }catch(error){
+        // console.warn(error);
+    }
+}
+
+async function getRole(){
+    try{
+        let Partener = await AsyncStorage.getItem(ROLE);
+        return Partener;
+    }catch(error){
+        console.warn(error);
     }
 }
 
@@ -130,11 +168,14 @@ async function loginPartenaire(login,password) {
         let res = await response.json();
         return res;
     }catch(error){
+        //console.warn(res)
         return error;
     }
 }
 
 async function register(params) {
+    //console.warn(params)
+
     try {
         let response = await fetch(PostRegister, {
             method: 'POST',
@@ -150,6 +191,27 @@ async function register(params) {
     }catch(error){
         return error;
     }
+}
+
+async function updateProfilPartenaire(params) {
+
+    try {
+        let response = await fetch(updatePartenaire, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params)
+        });
+
+        let res = await response.json();
+        //console.warn(res);
+        return res;
+    }catch(error){
+        return error;
+    }
+
 }
 
 async function postAnnonceRes(params) {
@@ -299,6 +361,65 @@ async function getSuppAnnonces(id) {
     }
 }
 
+async function AnnoncePartenaire(id_categorie, id_syndic) {
+    try {
+        let response = await fetch(Serveur+'annonce-partenaire/'+id_categorie+ '/'+id_syndic);
+        let res = await response.json();
+        //console.warn(res);
+        return res.result;
+    }catch(error){
+        return error;
+    }
+}
+
+async function AnnoncePartenaireSyndic(id_categorie, id_syndic) {
+    try {
+        let response = await fetch(Serveur+'annonce-syndic-partenaire/'+id_categorie+ '/'+id_syndic);
+        let res = await response.json();
+        //console.warn(res);
+        return res.result;
+    }catch(error){
+        return error;
+    }
+}
+
+async function getResidenceById( id_syndic) {
+    try {
+        let response = await fetch(Serveur+'residence-by-id/'+id_syndic);
+        let res = await response.json();
+        //console.warn(res);
+        return res.result;
+    }catch(error){
+        return error;
+    }
+}
+
+async function getResidentById( id) {
+    try {
+        let response = await fetch(Serveur+'resident-by-id/'+id);
+        let res = await response.json();
+        //console.warn(res);
+        return res.result;
+    }catch(error){
+        return error;
+    }
+}
+
+async function getPartenaireById( id) {
+    try {
+        let response = await fetch(Serveur+'partenaire-by-id/'+id);
+        let res = await response.json();
+        //console.warn(res);
+        return res.result;
+    }catch(error){
+        return error;
+    }
+}
+
+
+
+
+
 export{getAllMarker};
 export{login};
 export{register};
@@ -323,3 +444,13 @@ export{loginPartenaire};
 export{storePartner};
 export{getPartner};
 export{postAnnonceRes};
+export{storeRole};
+export{getRole};
+export{updateProfilPartenaire}
+export{detailPartenaire}
+export{getDetailPartenaire}
+export{AnnoncePartenaire}
+export{AnnoncePartenaireSyndic}
+export{getResidenceById}
+export{getResidentById}
+export{getPartenaireById}

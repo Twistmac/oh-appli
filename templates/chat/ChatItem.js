@@ -10,7 +10,7 @@ class ChatItem extends Component {
 
     constructor(props) {
       super(props);
-        // console.warn(this.props.messages)
+        //console.warn('this.props.messages')
       this.state = {
         id:1,
         isModalVisible: false,

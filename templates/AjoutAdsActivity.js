@@ -12,7 +12,7 @@ import style from '../Styles/Style';
 import {Container, Content, Header, Icon, Left, Button, Title, Form, Item, Input, Label, Picker, Textarea, Toast } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {LoginScreen} from '../route/ScreenName';
+import {LoginScreen, HomeScreen, AnnoncesScreen} from '../route/ScreenName';
 import Headers from '../header/Headers';
 import HeaderAll from '../header/HeadersAllPage';
 import Footers from '../footer/Footers';
@@ -134,9 +134,13 @@ export default class AjoutAdsActivity extends Component {
 	}
 
 	postNotImage(){
+		this.setState({
+			visibleSpinner: true,
+	})
 
 		const params = {
 			id_User : global.id,
+			id_partenaire : null,
     		type : 'r',
     		titre : this.state.titre,
     		prix: this.state.prix,
@@ -145,7 +149,35 @@ export default class AjoutAdsActivity extends Component {
     		syndic_id : global.syndic_id
 		}
 		postAnnonceRes(params).then((data)=>{
-			// console.warn(data);
+			
+			 //console.warn(params);
+			if (data.result === 'ok') {
+				this.setState({
+						visibleSpinner: false,
+				});
+			this.props.navigation.navigate(AnnoncesHomeScreen);
+			Toast.show({
+								text: "Add success !",
+								buttonText: "Ok",
+								duration:3000,
+								type:"success"
+						})
+						this.input._root.clear();
+						this.setState({
+						titre:'',
+					prix:null
+				})
+			}else{
+				this.setState({
+						visibleSpinner: false,
+				})
+			Toast.show({
+								text: "Error, please try again",
+								buttonText: "Ok",
+								duration:3000,
+								type:"danger"
+						})
+			}
 		})
 	}
 
@@ -163,7 +195,8 @@ export default class AjoutAdsActivity extends Component {
 		  }, [
 		    	{name: 'image', filename: this.state.fileName, type: this.state.type, data: this.state.dataImage},
 		    	{name: 'formulaire', data : JSON.stringify({
-		    		id_User : global.id,
+						id_User : global.id,
+						id_partenaire : null,
 		    		type : 'r',
 		    		titre : this.state.titre,
 		    		prix: this.state.prix,
@@ -174,6 +207,7 @@ export default class AjoutAdsActivity extends Component {
 		  ]).then((resp) => {
 		  	let result = resp.json().result;
 		  	if (result.result === 'ok') {
+					this.props.navigation.navigate(AnnoncesScreen);
 			  	this.setState({
 			  	    visibleSpinner: false,
 			  	});

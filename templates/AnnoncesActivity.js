@@ -111,6 +111,7 @@ export default class Annonces extends Component {
 
 
     componentWillMount() {
+      
       this.setState({
         interval: setInterval(() => {
           this.setState({

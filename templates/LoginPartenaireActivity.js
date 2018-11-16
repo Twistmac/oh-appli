@@ -6,7 +6,8 @@ import {
 	Image,
 	Alert,
 	TouchableOpacity,
-	BackHandler , DeviceEventEmitter
+	BackHandler , DeviceEventEmitter,
+	AsyncStorage
 
 }
 from 'react-native';
@@ -24,13 +25,13 @@ import {
 	Item,
 	ListItem,
 	List,
-	Toast
+	Toast,
 } 
 from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import style from '../Styles/Style';
 import {AddProfilScreen, HomeScreen, LoginScreen, HomePartenaireScreen} from '../route/ScreenName';
-import {loginPartenaire, storePartner, getPartner} from './services/Services';
+import {loginPartenaire, storePartner,detailPartenaire, getPartner, getRole} from './services/Services';
 import { StackNavigator, DrawerNavigator, DrawerItems} from  'react-navigation';
 
 
@@ -54,17 +55,23 @@ export default class LoginPartenaireActivity extends Component {
 	  	inputSuccessPwd:false,
 	  	inputErrorPwd:false
 	  };
+	  
 
 	  getPartner().then((data)=>{
-	  	// console.warn(JSON.parse(data).email);
+	  	 //console.warn(JSON.parse(data).email);
 	  	this.setState({
 	  		email:JSON.parse(data).email,
 	  		password:JSON.parse(data).password
 	  	})
-	  })
+	  });
+
 	}
 
+	
+
 	componentDidMount() {
+		global.UserRole = 'p';
+		//console.warn(global.role)
 	    DeviceEventEmitter.removeAllListeners('hardwareBackPress')
 	        DeviceEventEmitter.addListener('hardwareBackPress', () => {
 	          let invokeDefault = true
@@ -89,8 +96,10 @@ export default class LoginPartenaireActivity extends Component {
 	  }
 
 	  componentWillUnmount() {
+		global.roleUser = 'r';
+		//console.warn(global.role)
 	   DeviceEventEmitter.removeAllListeners('hardwareBackPress')
-      this.backPressSubscriptions.clear()
+	  this.backPressSubscriptions.clear();
 	  }
 
 	  handleHardwareBack = () => {
@@ -172,16 +181,19 @@ export default class LoginPartenaireActivity extends Component {
                 	email:this.state.email,
                 	password:this.state.password,
                 }
-                // console.warn(result);
+                //console.warn(result);
 				//succes = 1 succes
 				//succes = 2 wrong pass word
 				//succes = user not exist
 				if (result.success == true) {
 					storePartner(params);
-					global.userName = result.pseudo;
-					global.id = result.id;
-					global.role = result.role;					
-					global.type = "p";
+					global.userName = result.result[0].pseudo;
+					global.id = result.result[0].id;
+					global.UserRole = 'p';
+					//detailPartenaire(result.result);
+					global.detailPartenaire = result.result
+					//
+					//console.warn(result.result)
 					navigation.navigate(HomePartenaireScreen);
 				
 				}else if(result.success == false){
@@ -270,7 +282,7 @@ export default class LoginPartenaireActivity extends Component {
 					</View>
 					<View style={{padding:30}}>
 						<TouchableOpacity
-						 onPress = {() => navigation.navigate(LoginScreen)} >
+						 onPress = {() => {navigation.navigate(LoginScreen);}} >
 							<Text style={styles.textRegister}> Access Resident </Text>
 						</TouchableOpacity>
 					</View>

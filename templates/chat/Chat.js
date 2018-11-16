@@ -26,7 +26,7 @@ class Chat extends Component {
       var type = this.props.navigation.state.params.type;
       var dataAnnonces = this.props.navigation.state.params.dataAnnonces;
       var count = this.props.navigation.state.params.count;
-      console.warn(type)
+      //console.warn(ID_USER_2)
       var InfoAnnonces = {
         id:dataAnnonces.id,
         titre:dataAnnonces.titre,
@@ -46,6 +46,7 @@ class Chat extends Component {
 	}
 
 	componentDidMount(){
+        
         this.setState({
             count:0
         })

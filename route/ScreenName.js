@@ -15,6 +15,11 @@ const ChatScreen = 'ChatScreen';
 const CommentairesScreen = 'CommentairesScreen';
 const detailsAnnoncesSyndicScreen = 'detailsAnnoncesSyndicScreen';
 const HomePartenaireScreen = 'HomePartenaireScreen';
+const AjoutAdsPartenaireScreen = 'AjoutAdsPartenaireScreen';
+const AnnonceResidenceScreen = 'AnnonceResidenceScreen';
+const ChatPartenaireScreen = 'ChatPartenaireScreen';
+const ChatResidentPartenaireScreen = 'ChatResidentPartenaireScreen';
+
 
 export {
 	HomeScreen,
@@ -32,5 +37,9 @@ export {
 	ChatScreen,
 	CommentairesScreen,
 	detailsAnnoncesSyndicScreen,
-	HomePartenaireScreen
+	HomePartenaireScreen,
+	AjoutAdsPartenaireScreen,
+	AnnonceResidenceScreen,
+	ChatPartenaireScreen,
+	ChatResidentPartenaireScreen
 }

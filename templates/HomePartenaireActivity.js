@@ -33,9 +33,9 @@ import {Container, Content, Header, Icon, Left, Button, Title, Item, Input,Card,
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {LoginScreen, DetailsScreen, AjoutAdsScreen, CommentairesScreen, detailsAnnoncesSyndicScreen} from '../route/ScreenName';
 import Headers from '../header/Headers';
-import Footers from '../footer/Footers';
-import Fab from '../footer/Fab';
-import {getAnnonces, getAnnoncesSyndic} from './services/Services';
+import FootersPartenaire from '../footer/FootersPartenaire';
+import FAB_partenaire from '../footer/FabPartenaire';
+import {getAnnonces, getAnnoncesSyndic,AnnoncePartenaire} from './services/Services';
 import Slideshow from 'react-native-slideshow';
 
 
@@ -84,6 +84,7 @@ export default class HomePartenaire extends Component {
 
 
     componentWillMount() {
+
       this.setState({
         interval: setInterval(() => {
           this.setState({
@@ -142,26 +143,9 @@ export default class HomePartenaire extends Component {
       this.setState({
           visibleSpinner: true,
       })
-      getAnnoncesSyndic(global.id).then((data) => {
-        //console.warn(data);
-        const dataSlide = [];
-        for(var i=0; i<data.length; i++){
-          dataSlide.push({
-              url: "https://ohome.easywebmobile.fr/public/img/annonces/"+data[i]["image"],
-              title: data[i]["titre"],
-              caption: data[i]["created_at"],
-              id: data[i]["id"]
-          });
-        }
-        this.setState({ 
-          dataHorizontal : dataSlide
-        
-        })
-        //console.warn(data);
-      })
-
-      getAnnonces(global.id).then((data) => {
-        //console.warn(data);
+      
+      
+      AnnoncePartenaire(global.detailPartenaire[0].categorie_id, global.detailPartenaire[0].residence_id).then((data)=>{
         this.setState({ 
           dataSource:this.state.dataSource.cloneWithRows(data),
           annonces:data
@@ -170,6 +154,8 @@ export default class HomePartenaire extends Component {
           visibleSpinner: false,
         })
       })
+      
+
     }
 
    
@@ -348,18 +334,18 @@ export default class HomePartenaire extends Component {
       navigation.navigate(DetailsScreen, {params:params, updateData:this.updateData.bind(this),sectionID:sectionID} )
      }
 
-     _refreshControl(){
-       return (
-         <RefreshControl
-           tintColor="#ff0000"
-           title="Loading..."
-           titleColor="#00ff00"
-           colors={['#ff0000', '#00ff00', '#0000ff']}
-           progressBackgroundColor="#ffff00"
-           refreshing={this.state.refreshing}
-           onRefresh={()=>this._refreshListView()} />
-       )
-     };
+    //  _refreshControl(){
+    //    return (
+    //      <RefreshControl
+    //        tintColor="#ff0000"
+    //        title="Loading..."
+    //        titleColor="#00ff00"
+    //        colors={['#ff0000', '#00ff00', '#0000ff']}
+    //        progressBackgroundColor="#ffff00"
+    //        refreshing={this.state.refreshing}
+    //        onRefresh={()=>this._refreshListView()} />
+    //    )
+    //  };
 
      filterData(value){
       this.setState({
@@ -441,6 +427,7 @@ export default class HomePartenaire extends Component {
        detailsAnnoncesSyndic(id_annonce){
           this.props.navigation.navigate(detailsAnnoncesSyndicScreen, {id_annonce: id_annonce});
        }
+       
 
        _renderIconLike(data){
         if (data.item.etat_like) {
@@ -527,7 +514,7 @@ export default class HomePartenaire extends Component {
       outputRange: [0, -HEADER_HEIGHT],
       extrapolate: 'clamp'
     });
-    const titre = 'Partenaire';
+    const titre = 'Partner';
     const {navigation} = this.props;
     const filterData = this.filterData;
     let dataSend = {
@@ -556,19 +543,6 @@ export default class HomePartenaire extends Component {
         <Content contentContainerStyle={[styles.container, {backgroundColor:'transparent'}]}>
         
 
-        <View style={{paddingTop: 60}}>
-            <View style ={{backgroundColor:'#C0C0C0', width:'100%', flexDirection: 'row', padding:10}} >
-                      <Text style={{color:'#152a45', textAlign:'left', fontSize:15, fontWeight:'bold', paddingLeft:10}} >Residence : {global.nom_residence}</Text>
-                </View>
-            <Slideshow
-          dataSource= {this.state.dataHorizontal}
-          height = {this.state.viewport.height-450}
-          position={this.state.positionSlide}
-          onPositionChanged={position => this.setState({ positionSlide })}
-          onPress = {({image}) => this.detailsAnnoncesSyndic(image['id'])}
-          />
-        </View>
-
           <View>
           {/* <Carousel 
             ref={(c) => {this._carousel = c;}}
@@ -591,19 +565,21 @@ export default class HomePartenaire extends Component {
           <View style={styles.style_annonce}>
                 <ListView enableEmptySections={true}
                   contentContainerStyle={styles.listView}
-                  refreshControl={this._refreshControl()}
+                  // refreshControl={this._refreshControl()}
                   dataSource={this.state.dataSource}
                   renderRow={(data, rowId, sectionID) => this._renderListView(data, rowId, sectionID)}>
                 </ListView>
           </View>
         </Content>
         </AnimatedScrollView>
-        <Fab navigation = {navigation} />
-        <Footers navigation ={dataSend}/>
+        <FAB_partenaire navigation = {navigation} />
+        <FootersPartenaire navigation ={dataSend}/>
       </Container>
     );
   }
 }
+
+
 const bleuOhome = '#152a45';
 const height = ((width / 2) - 15) *2;
 const styles = StyleSheet.create({

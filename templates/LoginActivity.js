@@ -6,7 +6,7 @@ import {
 	Image,
 	Alert,
 	TouchableOpacity,
-
+	AsyncStorage,
 }
 from 'react-native';
 import {
@@ -29,7 +29,7 @@ from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import style from '../Styles/Style';
 import {AddProfilScreen, AnnoncesScreen, LoginPartenaireScreen} from '../route/ScreenName';
-import {login, storeMailResident, getMailResident, storePassResident, getPassResident} from './services/Services';
+import {login, storeMailResident, getMailResident, storePassResident, getPassResident, storeRole} from './services/Services';
 const dataArray = [
   { title: "First Element", content: "Lorem ipsum dolor sit amet" },
   { title: "Second Element", content: "Lorem ipsum dolor sit amet" },
@@ -48,6 +48,7 @@ export default class Login extends Component {
 	  	inputSuccessPwd:false,
 	  	inputErrorPwd:false
 	  };
+	  global.UserRole = 'r';
 
 	  getMailResident().then((mail)=>{
 	  	// console.warn(mail);
@@ -60,12 +61,14 @@ export default class Login extends Component {
             this.setState({
                 password: pass
             })
-        })
-	  
+		});
 	  
 	}
 
 	componentDidMount(){
+
+		//console.warn('test');
+		
 		if (this.state.email !== null && this.state.password !== null) {
 			setTimeout(() => this.post(), 1000)
 		}
@@ -147,8 +150,11 @@ export default class Login extends Component {
 				//succes = 3 user not exist
 				
 				if (result.success == 1) {
+					//console.warn(result.success)
 					storeMailResident(etat.email);
 					storePassResident(etat.password);
+					global.UserRole = 'r';
+					
 					global.userName = result.pseudo;
 					global.id = result.id;
 					global.syndic_id = result.syndic_id;
@@ -253,7 +259,7 @@ export default class Login extends Component {
 					</View>
 
 					<View style={{padding:30}}>
-						<TouchableOpacity onPress = {() => navigation.navigate(LoginPartenaireScreen)}>
+						<TouchableOpacity onPress = {() => {navigation.navigate(LoginPartenaireScreen)}}>
 							<Text style={styles.textRegister}> Partner Access </Text>
 						</TouchableOpacity>
 					</View>
@@ -261,6 +267,8 @@ export default class Login extends Component {
 			</Container>
 		);
 	}
+
+	
 }
 
 const styles = StyleSheet.create({

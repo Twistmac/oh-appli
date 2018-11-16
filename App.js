@@ -27,14 +27,19 @@ import reducers from './templates/reducers';
 
 import {Root} from 'native-base';
 import Routenavigation from './route/RouteNavigation';
+import Route2 from './route/Route2';
 import Chat from './templates/chat/Chat';
+import {getRole} from './templates/services/Services';
 
 // type Props = {};
 class App extends Component {
   constructor(props) {
     super(props);
     this.backPressSubscriptions = new Set()
-    this.state = {};
+    this.state = {
+      roleUser : null
+    };
+    
   }
 
   /*onButtonPress = () => {
@@ -54,7 +59,9 @@ class App extends Component {
         return true;
   }*/
 
+
    componentDidMount () {
+    //  console.warn(global.UserRole)
     DeviceEventEmitter.removeAllListeners('hardwareBackPress')
     DeviceEventEmitter.addListener('hardwareBackPress', () => {
       let invokeDefault = true
@@ -96,16 +103,19 @@ class App extends Component {
    }
   render() {
     const navigation = this.props;
-    return (
-    	<Root>
-          <Provider store ={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
-            <MenuProvider>
-            		<Routenavigation />
-            </MenuProvider>    
-          </Provider>
-      </Root>
-    );
-  }
+    
+      return (
+        <Root>
+            <Provider store ={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
+              <MenuProvider>
+                  <Routenavigation />
+              </MenuProvider>    
+            </Provider>
+        </Root>
+      );
+    }
+    
+    
 }
 
 export default App; 

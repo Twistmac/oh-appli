@@ -1,5 +1,5 @@
 import { StackNavigator, DrawerNavigator, DrawerItems} from  'react-navigation';
-import {BackHandler} from 'react-native';
+import {BackHandler, AsyncStorage} from 'react-native';
 import { connect } from 'react-redux';
 import HomeScreen from '../templates/HomeActivity';
 import LoginScreen from '../templates/LoginActivity';
@@ -17,11 +17,18 @@ import AccessScreen from '../templates/AccessActivity';
 import LogoutScreen from '../templates/Logout';
 import DetailsScreen from '../templates/detailsAnnoncesActivity';
 import ProfileScreen from '../templates/ProfileActivity';
+import ProfilePartenaireScreen from '../templates/ProfilePartenaireActivity';
 import AjoutAdsScreen from '../templates/AjoutAdsActivity';
+import AjoutAdsPartenaireScreen from '../templates/AddAdsPartenaireActivity';
 import CommentairesScreen from '../templates/CommentairesActivity';
 import detailsAnnoncesSyndicScreen from '../templates/detailsAnnoncesSyndicActivity';
 import ChatScreen from '../templates/chat/Chat';
 import HomePartenaireScreen from '../templates/HomePartenaireActivity';
+import AnnonceResidenceScreen from '../templates/AnnonceResidenceActivity';
+import {login, storeMailResident, getMailResident, storePassResident, getPassResident, storeRole, getRole} from '../templates/services/Services';
+import ChatPartenaireScreen from '../templates/chat/ChatPartenaire';
+import ChatResidentPartenaireScreen from '../templates/chat/ChatRp';
+
 
 
 
@@ -65,7 +72,24 @@ const Drawer2 = DrawerNavigator({
         screen: HomePartenaireScreen,
         navigationOptions: {
             headerTitleStyle: { left:10},
-            title: "Partenaire",
+            title: "Partner",
+            // drawerLockMode:'unlocked',
+        }
+    },
+    ProfileScreen: {
+        screen: ProfilePartenaireScreen,
+        navigationOptions: {
+            headerTitleStyle: { left:10},
+            title: "Profil",
+            // drawerLockMode:'unlocked',
+        }
+    },
+
+    AnnonceResidenceScreen: {
+        screen: AnnonceResidenceScreen,
+        navigationOptions: {
+            headerTitleStyle: { left:10},
+            title: "Residence Ads",
             // drawerLockMode:'unlocked',
         }
     },
@@ -83,7 +107,7 @@ const Drawer2 = DrawerNavigator({
     contentComponent: CustomDrawerContentComponent,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute:'DrawerClose',
-    drawerToggleRoiute:'DrawerToggle',
+    drawerToggleRoute:'DrawerToggle',
     contentOptions: {
         activeTintColor: "#f5d017" //couilure active menus
     },
@@ -102,7 +126,7 @@ const Drawer = DrawerNavigator({
            screen: ProfileScreen,
            navigationOptions: {
                 headerTitleStyle: { left:30 },
-                title: global.type,
+                title: "Profil",
                 // drawerLockMode:'unlocked', //enleve draw
            }
        },
@@ -155,16 +179,14 @@ const Drawer = DrawerNavigator({
         contentComponent: CustomDrawerContentComponent,
         drawerOpenRoute: 'DrawerOpen',
         drawerCloseRoute:'DrawerClose',
-        drawerToggleRoiute:'DrawerToggle',
+        drawerToggleRoute:'DrawerToggle',
         contentOptions: {
             activeTintColor: "#f5d017" //couilure active menus
         },
     },
 );
 
-
-
-
+//console.warn(global.roleUser);
 
 const PageRoute = StackNavigator({
         LoginScreen:{screen: LoginScreen},
@@ -173,15 +195,22 @@ const PageRoute = StackNavigator({
         DetailsScreen:{screen: DetailsScreen},
         AjoutAdsScreen:{screen: AjoutAdsScreen},
         ChatScreen:{screen: ChatScreen},
+        // AnnonceResidenceScreen: {screen: AnnonceResidenceScreen},
         CommentairesScreen:{screen: CommentairesScreen},
-        HomePartenaireScreen:{screen: HomePartenaireScreen},
+        //HomePartenaireScreen:{screen: HomePartenaireScreen},
         detailsAnnoncesSyndicScreen:{screen: detailsAnnoncesSyndicScreen},
-        Main : {screen : (global.type == 'p')? Drawer2 : Drawer}
+        AjoutAdsPartenaireScreen: { screen: AjoutAdsPartenaireScreen},
+        ChatPartenaireScreen: { screen: ChatPartenaireScreen},
+        ChatResidentPartenaireScreen: { screen: ChatResidentPartenaireScreen},
+        Screen :  (global.UserRole == 'p') ? Drawer2 : Drawer,
+        //Main : Drawer,
+        Main: Drawer
     },
     {
         headerMode: "none",
     }
 );
+
 
 const styles = StyleSheet.create({
   DrawerImage:{
